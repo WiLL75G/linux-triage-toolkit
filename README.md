@@ -4,9 +4,9 @@ A modular Bash-based live response collector for Linux hosts during incident res
 
 ## Status
 
-🚧 In active development.
+In active development.
 
 ## Author
 
-**James Williams** — SOC Analyst (in training)
+**James Williams** SOC Analyst (in training)
 GitHub: [@WiLL75G](https://github.com/WiLL75G)
