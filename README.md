@@ -1,8 +1,5 @@
-<div align="center">
-  <img src="banner.svg" alt="Banner" width="100%" />
-</div>
 
-# linux-triage-toolkit
+                                  # linux-triage-toolkit
 
 **A modular Bash-based live response collector for Linux hosts during incident response.**
 
