@@ -13,7 +13,7 @@
 
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 
 - [Overview](#-overview)
 - [Why This Project Exists](#-why-this-project-exists)
@@ -33,7 +33,7 @@
 
 ---
 
-## 🔍 Overview
+## Overview
 
 `linux-triage-toolkit` is a defensive security tool designed for **Tier 1 SOC analysts and incident responders** who need to rapidly snapshot the state of a potentially compromised Linux host before evidence is lost.
 
@@ -41,7 +41,7 @@ When a host is suspected of compromise, **volatile data disappears fast** runnin
 
 ---
 
-## 🎯 Why This Project Exists
+## Why This Project Exists
 
 In real-world incident response engagements, three problems consistently slow analysts down:
 
@@ -53,16 +53,16 @@ In real-world incident response engagements, three problems consistently slow an
 
 ---
 
-## 📌 Project Status
+## Project Status
 
-> 🚧 **Active development** Day 1 of a 7-day public build series.
+> **Active development** Day 1 of a 7-day public build series.
 
 Current capability: orchestrator + system information module operational.
 See the [Build Roadmap](#-build-roadmap) for the daily release schedule.
 
 ---
 
-## ✨ Features
+## Features
 
 ### Current (Day 1)
 
@@ -85,7 +85,7 @@ See the [Build Roadmap](#-build-roadmap) for the daily release schedule.
 
 ---
 
-## 🏛 Architecture
+## Architecture
 
 ```
                    ┌────────────────────┐
@@ -118,7 +118,7 @@ See the [Build Roadmap](#-build-roadmap) for the daily release schedule.
 
 ---
 
-## 🛠 Installation
+## Installation
 
 ### Requirements
 
@@ -137,7 +137,7 @@ chmod +x triage.sh modules/*.sh
 
 ---
 
-## ▶️ Usage
+## Usage
 
 ### Basic run
 
@@ -168,7 +168,7 @@ sha256sum -c output/ir-host_20260526T142201Z.tar.gz.sha256
 
 ---
 
-## 📦 Module Catalog
+## Module Catalog
 
 | # | Module | Purpose | MITRE ATT&CK | Status |
 |---|---|---|---|---|
@@ -183,7 +183,7 @@ sha256sum -c output/ir-host_20260526T142201Z.tar.gz.sha256
 
 ---
 
-## 🛡 MITRE ATT&CK Coverage
+## MITRE ATT&CK Coverage
 
 This toolkit is designed to surface evidence aligned to the following techniques. Coverage expands daily through the build series.
 
@@ -204,7 +204,7 @@ This toolkit is designed to surface evidence aligned to the following techniques
 
 ---
 
-## 📄 Sample Output
+## Sample Output
 
 A representative `01_system_info.txt` artifact looks like:
 
@@ -250,7 +250,7 @@ A live record of the 7-day build. Each day adds one module and a documented lear
 
 ---
 
-## 📂 Repository Structure
+## Repository Structure
 
 ```
 linux-triage-toolkit/
@@ -268,7 +268,7 @@ linux-triage-toolkit/
 
 ---
 
-## ⚠️ Limitations & Future Work
+## Limitations & Future Work
 
 **Current limitations:**
 
