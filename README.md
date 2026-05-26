@@ -8,5 +8,5 @@ In active development.
 
 ## Author
 
-**G William** SOC Analyst (in training)
+**Gokah William** SOC Analyst (in training)
 GitHub: [@WiLL75G](https://github.com/WiLL75G)
