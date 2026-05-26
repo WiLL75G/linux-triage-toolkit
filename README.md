@@ -286,15 +286,9 @@ linux-triage-toolkit/
 
 ---
 
-## Author
+> SOC Analyst (in training) focused on blue-team operations, threat detection, and incident response.
 
-**Gokah William**
-SOC Analyst (in training) focused on blue-team operations, threat detection, and incident response.
 
-- GitHub: [@WiLL75G](https://github.com/WiLL75G)
-- Building a public learning portfolio of SOC tooling and detection work.
-
----
 
 ## License
 
