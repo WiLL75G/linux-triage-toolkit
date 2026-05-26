@@ -1,5 +1,5 @@
 
-                                  # linux-triage-toolkit
+                                  lINUX-TRIAGE-TOOLKIT
 
 **A modular Bash-based live response collector for Linux hosts during incident response.**
 
