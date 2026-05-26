@@ -1,0 +1,13 @@
+# Triage output bundles (generated, never commit)
+output/*
+!output/.gitkeep
+
+# macOS junk
+.DS_Store
+
+# Editor swap files
+*.swp
+*~
+
+# Logs
+*.log
