@@ -1,0 +1,67 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300" role="img" aria-label="linux-triage-toolkit banner">
+  <defs>
+    <linearGradient id="bgGrad" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0%" stop-color="#0a0e14"/>
+      <stop offset="100%" stop-color="#161b22"/>
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0" y1="0" x2="1" y2="0">
+      <stop offset="0%" stop-color="#39d353"/>
+      <stop offset="100%" stop-color="#26a641"/>
+    </linearGradient>
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1f2933" stroke-width="0.5"/>
+    </pattern>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="300" fill="url(#bgGrad)"/>
+  <rect width="1200" height="300" fill="url(#grid)"/>
+
+  <!-- Left accent bar -->
+  <rect x="0" y="0" width="6" height="300" fill="url(#accentGrad)"/>
+
+  <!-- Terminal prompt mock (top-left) -->
+  <g font-family="Menlo, Consolas, monospace" font-size="14" fill="#7d8590">
+    <text x="40" y="50">james756@ir-host:~$ ./triage.sh</text>
+    <text x="40" y="72" fill="#39d353">[06:55:00Z] Linux Triage Toolkit starting</text>
+    <text x="40" y="92" fill="#7d8590">[06:55:00Z] Running module: 01_system_info</text>
+    <text x="40" y="112" fill="#39d353">[06:55:00Z]   -&gt; 01_system_info OK</text>
+  </g>
+
+  <!-- Main title -->
+  <g font-family="Menlo, Consolas, monospace">
+    <text x="40" y="190" font-size="56" font-weight="700" fill="#e6edf3">linux-triage-toolkit</text>
+    <text x="40" y="225" font-size="20" fill="#7d8590">Modular Bash live response collector for Linux incident response</text>
+  </g>
+
+  <!-- Tag pills -->
+  <g font-family="Menlo, Consolas, monospace" font-size="13" font-weight="600">
+    <rect x="40" y="248" width="76" height="26" rx="13" fill="#0d4429" stroke="#26a641" stroke-width="1"/>
+    <text x="78" y="266" text-anchor="middle" fill="#39d353">Bash</text>
+
+    <rect x="124" y="248" width="76" height="26" rx="13" fill="#0d4429" stroke="#26a641" stroke-width="1"/>
+    <text x="162" y="266" text-anchor="middle" fill="#39d353">Linux</text>
+
+    <rect x="208" y="248" width="76" height="26" rx="13" fill="#0d4429" stroke="#26a641" stroke-width="1"/>
+    <text x="246" y="266" text-anchor="middle" fill="#39d353">DFIR</text>
+
+    <rect x="292" y="248" width="100" height="26" rx="13" fill="#0d4429" stroke="#26a641" stroke-width="1"/>
+    <text x="342" y="266" text-anchor="middle" fill="#39d353">MITRE ATT&amp;CK</text>
+
+    <rect x="400" y="248" width="76" height="26" rx="13" fill="#0d4429" stroke="#26a641" stroke-width="1"/>
+    <text x="438" y="266" text-anchor="middle" fill="#39d353">SOC</text>
+  </g>
+
+  <!-- Right-side shield iconography -->
+  <g transform="translate(990, 80)">
+    <!-- Outer shield -->
+    <path d="M 80 0 L 160 30 L 160 100 Q 160 160 80 200 Q 0 160 0 100 L 0 30 Z"
+          fill="none" stroke="#39d353" stroke-width="2" opacity="0.9"/>
+    <!-- Inner shield -->
+    <path d="M 80 20 L 140 44 L 140 100 Q 140 148 80 180 Q 20 148 20 100 L 20 44 Z"
+          fill="#0d4429" opacity="0.3" stroke="#26a641" stroke-width="1"/>
+    <!-- Cursor -->
+    <text x="80" y="118" font-family="Menlo, Consolas, monospace" font-size="48" font-weight="700"
+          fill="#39d353" text-anchor="middle">&gt;_</text>
+  </g>
+</svg>
