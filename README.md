@@ -1,6 +1,6 @@
 <div align="center">
 
-<img src="./banner.svg" alt="linux-triage-toolkit banner" width="100%"/>
+<img src="banner.svg" alt="Banner" width="100%" />
 
 # linux-triage-toolkit
 
