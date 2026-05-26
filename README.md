@@ -117,7 +117,7 @@ See the [Build Roadmap](#-build-roadmap) for the daily release schedule.
                   └──────────────────┘
 ```
 
-**Design principle:** the orchestrator owns paths and bundling. Modules only know how to *collect* — they receive a destination directory as `$1` and write artifacts into it. This loose coupling means new modules drop in without touching the orchestrator.
+**Design principle:** the orchestrator owns paths and bundling. Modules only know how to *collect* they receive a destination directory as `$1` and write artifacts into it. This loose coupling means new modules drop in without touching the orchestrator.
 
 ---
 
@@ -128,7 +128,7 @@ See the [Build Roadmap](#-build-roadmap) for the daily release schedule.
 - Linux host (Ubuntu 18.04+, Debian 10+, CentOS 7+, RHEL 7+ supported)
 - Bash 4.4 or later
 - Standard GNU coreutils (`tar`, `sha256sum`, `find`, `awk`)
-- **Root or sudo recommended** — some artifacts (full auth logs, `lastb`, sudoers) require elevated privileges
+- **Root or sudo recommended** some artifacts (full auth logs, `lastb`, sudoers) require elevated privileges
 
 ### Clone
 
@@ -244,11 +244,11 @@ A live record of the 7-day build. Each day adds one module and a documented lear
 | Day | Date | Scope | Commit |
 |---|---|---|---|
 | **1** | Tue 26 May 2026 | Project scaffold + `triage.sh` orchestrator + `01_system_info` | ✅ Shipped |
-| **2** | Wed 27 May 2026 | `02_users` — user, session, and sudoers collection | 🔜 |
-| **3** | Thu 28 May 2026 | `03_processes` — process tree + deleted-binary detection | 🔜 |
-| **4** | Fri 29 May 2026 | `04_network` — listeners, established conns, ARP, firewall | 🔜 |
-| **5** | Mon 1 Jun 2026 | `05_persistence` — cron, systemd, SSH keys, shell rc files | 🔜 |
-| **6** | Tue 2 Jun 2026 | `06_files` + `07_logs` — file artifacts and log capture | 🔜 |
+| **2** | Wed 27 May 2026 | `02_users` user, session, and sudoers collection | 🔜 |
+| **3** | Thu 28 May 2026 | `03_processes` process tree + deleted-binary detection | 🔜 |
+| **4** | Fri 29 May 2026 | `04_network` listeners, established conns, ARP, firewall | 🔜 |
+| **5** | Mon 1 Jun 2026 | `05_persistence` cron, systemd, SSH keys, shell rc files | 🔜 |
+| **6** | Tue 2 Jun 2026 | `06_files` + `07_logs` file artifacts and log capture | 🔜 |
 | **7** | Wed 3 Jun 2026 | `08_hashes` + Ubuntu VM validation + final SOC report | 🔜 |
 
 ---
