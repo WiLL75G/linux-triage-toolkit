@@ -40,7 +40,7 @@
 
 `linux-triage-toolkit` is a defensive security tool designed for **Tier 1 SOC analysts and incident responders** who need to rapidly snapshot the state of a potentially compromised Linux host before evidence is lost.
 
-When a host is suspected of compromise, **volatile data disappears fast** — running processes, network connections, attacker shells, and in-memory artifacts can all vanish on reboot or remediation. This toolkit captures that volatile state, plus key persistence and forensic artifacts, into a portable evidence bundle with an integrity hash for chain of custody.
+When a host is suspected of compromise, **volatile data disappears fast** running processes, network connections, attacker shells, and in-memory artifacts can all vanish on reboot or remediation. This toolkit captures that volatile state, plus key persistence and forensic artifacts, into a portable evidence bundle with an integrity hash for chain of custody.
 
 ---
 
@@ -58,7 +58,7 @@ In real-world incident response engagements, three problems consistently slow an
 
 ## 📌 Project Status
 
-> 🚧 **Active development** — Day 1 of a 7-day public build series.
+> 🚧 **Active development** Day 1 of a 7-day public build series.
 
 Current capability: orchestrator + system information module operational.
 See the [Build Roadmap](#-build-roadmap) for the daily release schedule.
@@ -69,21 +69,21 @@ See the [Build Roadmap](#-build-roadmap) for the daily release schedule.
 
 ### Current (Day 1)
 
-- ✅ **Modular architecture** — each collection module is a self-contained Bash script under `modules/`
-- ✅ **UTC timestamping** — all timestamps are ISO-8601 UTC for cross-timezone IR correlation
-- ✅ **Defensive Bash** — every script uses `set -euo pipefail` to fail loud, not silent
-- ✅ **Chain of custody** — every triage bundle is tarballed and SHA-256 hashed
-- ✅ **Per-module fault tolerance** — if one module fails, the others still run
-- ✅ **System identification** — hostname, kernel, OS release, uptime, timezone (MITRE T1082)
+- ✅ **Modular architecture** each collection module is a self-contained Bash script under `modules/`
+- ✅ **UTC timestamping** all timestamps are ISO-8601 UTC for cross-timezone IR correlation
+- ✅ **Defensive Bash** every script uses `set -euo pipefail` to fail loud, not silent
+- ✅ **Chain of custody** every triage bundle is tarballed and SHA-256 hashed
+- ✅ **Per-module fault tolerance** if one module fails, the others still run
+- ✅ **System identification** hostname, kernel, OS release, uptime, timezone (MITRE T1082)
 
 ### Planned (Days 2 – 7)
 
 - 🔜 User & session collection (T1087)
 - 🔜 Process discovery, including deleted-binary detection via `/proc` (T1057)
-- 🔜 Network state — listeners, established connections, ARP, firewall (T1049, T1016)
-- 🔜 Persistence hunting — cron, systemd, SSH keys, shell rc files (T1543, T1053)
-- 🔜 File artifacts — recent modifications, SUID/SGID, world-writable (T1083)
-- 🔜 Log collection — `auth.log`, syslog, journal, bash history (T1070)
+- 🔜 Network state listeners, established connections, ARP, firewall (T1049, T1016)
+- 🔜 Persistence hunting cron, systemd, SSH keys, shell rc files (T1543, T1053)
+- 🔜 File artifacts recent modifications, SUID/SGID, world-writable (T1083)
+- 🔜 Log collection `auth.log`, syslog, journal, bash history (T1070)
 - 🔜 SHA-256 hashing of suspicious binaries for IOC sharing
 
 ---
@@ -277,7 +277,7 @@ linux-triage-toolkit/
 
 - Tested primarily against **Debian/Ubuntu**; RHEL/CentOS paths fall back gracefully but are not yet validated end-to-end.
 - Some artifacts (full `auth.log`, `lastb`, `sudoers`) require root privileges. The tool degrades to "not readable" notices rather than failing.
-- No remote collection — the toolkit is intended for on-host execution. Use `scp` to retrieve the bundle from a compromised host.
+- No remote collection the toolkit is intended for on-host execution. Use `scp` to retrieve the bundle from a compromised host.
 - No anti-tampering protection beyond the bundle hash. An attacker with root before collection could alter live evidence.
 
 **Future enhancements being considered:**
@@ -285,22 +285,22 @@ linux-triage-toolkit/
 - JSON-formatted output mode for SIEM ingestion
 - Optional remote artifact upload (SFTP / S3)
 - Memory acquisition module (LiME integration)
-- Detection signature library — known-bad cron entries, suspicious `.bashrc` snippets
+- Detection signature library known-bad cron entries, suspicious `.bashrc` snippets
 
 ---
 
-## 👤 Author
+## Author
 
 **Gokah William**
-SOC Analyst (in training) — focused on blue-team operations, threat detection, and incident response.
+SOC Analyst (in training) focused on blue-team operations, threat detection, and incident response.
 
-- 🌐 GitHub: [@WiLL75G](https://github.com/WiLL75G)
-- 💼 Building a public learning portfolio of SOC tooling and detection work.
+- GitHub: [@WiLL75G](https://github.com/WiLL75G)
+- Building a public learning portfolio of SOC tooling and detection work.
 
 ---
 
-## 📜 License
+## License
 
-This project is licensed under the **MIT License** — see the [LICENSE](LICENSE) file for full text.
+This project is licensed under the **MIT License** see the [LICENSE](LICENSE) file for full text.
 
 > Built as part of a documented public learning journey toward a SOC Tier 1 Analyst role. Feedback, issues, and pull requests welcomed.
