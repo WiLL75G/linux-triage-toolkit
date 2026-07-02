@@ -4,10 +4,10 @@
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Shell: Bash](https://img.shields.io/badge/shell-Bash%204.4%2B-1f425f.svg)](https://www.gnu.org/software/bash/)
-[![Platform: Linux](https://img.shields.io/badge/platform-Linux-blue.svg)]()
-[![Modules Shipped](https://img.shields.io/badge/modules-3%20%2F%208-brightgreen.svg)]()
+[![Platform: Linux](https://img.shields.io/badge/platform-Linux-blue.svg)](https://github.com/WiLL75G/linux-triage-toolkit)
+[![Modules Shipped](https://img.shields.io/badge/modules-3%20%2F%208-brightgreen.svg)](https://github.com/WiLL75G/linux-triage-toolkit/tree/main/modules)
 [![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK%20mapped-red.svg)](https://attack.mitre.org/)
-[![Status](https://img.shields.io/badge/status-active%20development-orange.svg)]()
+[![Status](https://img.shields.io/badge/status-active%20development-orange.svg)](https://github.com/WiLL75G/linux-triage-toolkit/commits/main)
 
 ---
 
@@ -24,17 +24,17 @@ Built as a public, incrementally-shipped learning project by a **SOC analyst-in-
 - [The Problem](#-the-problem)
 - [What This Tool Does](#-what-this-tool-does)
 - [Why This Project Exists](#-why-this-project-exists)
-- [How It Works](#-how-it-works)
+- [How It Works](#%EF%B8%8F-how-it-works)
 - [Live Demo](#-live-demo-sample-output)
 - [Installation](#-installation)
-- [Usage](#-usage)
+- [Usage](#%EF%B8%8F-usage)
 - [Module Catalog](#-module-catalog)
 - [MITRE ATT&CK Coverage](#-mitre-attck-coverage)
 - [Design Decisions](#-design-decisions)
 - [Skills Demonstrated](#-skills-demonstrated)
 - [Roadmap & Progress](#-roadmap--progress)
 - [Repository Structure](#-repository-structure)
-- [Limitations & Future Work](#-limitations--future-work)
+- [Limitations & Future Work](#%EF%B8%8F-limitations--future-work)
 - [Author & Contact](#-author--contact)
 - [License](#-license)
 
@@ -86,8 +86,8 @@ The 7-Sunday incremental build cadence (with public commits and posts each week)
 
 Three steps, one command:
 
-1. **`triage.sh`** creates a timestamped case directory for this run.
-2. Each script in **`modules/`** runs in order and writes its findings into that directory.
+1. **[`triage.sh`](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/triage.sh)** creates a timestamped case directory for this run.
+2. Each script in **[`modules/`](https://github.com/WiLL75G/linux-triage-toolkit/tree/main/modules)** runs in order and writes its findings into that directory.
 3. The whole directory is bundled into a **`.tar.gz`** and a **SHA-256 hash** is generated for chain of custody.
 
 That's it. No agents, no dependencies, no configuration files.
@@ -96,7 +96,7 @@ That's it. No agents, no dependencies, no configuration files.
 
 ## Live Demo (Sample Output)
 
-**Detecting evasive malware via deleted binaries** a signature technique of this toolkit:
+**Detecting evasive malware via deleted binaries** — a signature technique of this toolkit:
 
 ```
 --- Processes with deleted binaries (T1055 evasion indicator) ---
@@ -132,7 +132,7 @@ output/ir-host_20260702T112120Z.tar.gz: OK
 
 - Linux host (Ubuntu 18.04+, Debian 10+, CentOS 7+, RHEL 7+)
 - Bash 4.4+, standard GNU coreutils (`tar`, `sha256sum`, `find`, `awk`)
-- **Root or sudo strongly recommended** some artifacts (auth logs, `lastb`, sudoers) require elevated privileges
+- **Root or sudo strongly recommended** — some artifacts (auth logs, `lastb`, sudoers) require elevated privileges
 
 ### Clone & prep
 
@@ -174,13 +174,13 @@ tar -xzf output/<hostname>_<UTC-timestamp>.tar.gz
 
 | # | Module | Purpose | MITRE ATT&CK | Status |
 |---|---|---|---|---|
-| 01 | `01_system_info.sh` | Host identity, OS, kernel, timezone | T1082 | ✅ Shipped |
-| 02 | `02_users.sh` | Logged-in users, login history, UID-0 audit, sudoers | T1087, T1078 | ✅ Shipped |
-| 03 | `03_processes.sh` | Process tree, **deleted-binary detection**, CPU/mem top-10 | T1057, T1055 | ✅ Shipped |
-| 04 | `04_network.sh` | Listeners, established conns, ARP, firewall rules | T1049, T1016 | 🔜 Planned |
-| 05 | `05_persistence.sh` | Cron, systemd, rc.local, SSH keys, shell rc files | T1543, T1053, T1098 | 🔜 Planned |
-| 06 | `06_files.sh` | Recent modifications, SUID/SGID, world-writable | T1083, T1222 | 🔜 Planned |
-| 07 | `07_logs.sh` | auth.log, syslog, journalctl, bash history | T1070 | 🔜 Planned |
+| 01 | [`01_system_info.sh`](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/modules/01_system_info.sh) | Host identity, OS, kernel, timezone | [T1082](https://attack.mitre.org/techniques/T1082/) | ✅ Shipped |
+| 02 | [`02_users.sh`](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/modules/02_users.sh) | Logged-in users, login history, UID-0 audit, sudoers | [T1087](https://attack.mitre.org/techniques/T1087/), [T1078](https://attack.mitre.org/techniques/T1078/) | ✅ Shipped |
+| 03 | [`03_processes.sh`](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/modules/03_processes.sh) | Process tree, **deleted-binary detection**, CPU/mem top-10 | [T1057](https://attack.mitre.org/techniques/T1057/), [T1055](https://attack.mitre.org/techniques/T1055/) | ✅ Shipped |
+| 04 | `04_network.sh` | Listeners, established conns, ARP, firewall rules | [T1049](https://attack.mitre.org/techniques/T1049/), [T1016](https://attack.mitre.org/techniques/T1016/) | 🔜 Planned |
+| 05 | `05_persistence.sh` | Cron, systemd, rc.local, SSH keys, shell rc files | [T1543](https://attack.mitre.org/techniques/T1543/), [T1053](https://attack.mitre.org/techniques/T1053/), [T1098](https://attack.mitre.org/techniques/T1098/) | 🔜 Planned |
+| 06 | `06_files.sh` | Recent modifications, SUID/SGID, world-writable | [T1083](https://attack.mitre.org/techniques/T1083/), [T1222](https://attack.mitre.org/techniques/T1222/) | 🔜 Planned |
+| 07 | `07_logs.sh` | auth.log, syslog, journalctl, bash history | [T1070](https://attack.mitre.org/techniques/T1070/) | 🔜 Planned |
 | 08 | `08_hashes.sh` | SHA-256 of suspect binaries for IOC sharing | — | 🔜 Planned |
 
 ---
@@ -191,19 +191,19 @@ Every module maps to specific ATT&CK techniques so downstream analysts can immed
 
 | Tactic | Technique | Name | Module |
 |---|---|---|---|
-| Discovery | T1082 | System Information Discovery | 01 |
-| Discovery | T1087 | Account Discovery | 02 |
-| Discovery | T1057 | Process Discovery | 03 |
-| Discovery | T1049 | System Network Connections Discovery | 04 |
-| Discovery | T1016 | System Network Configuration Discovery | 04 |
-| Discovery | T1083 | File and Directory Discovery | 06 |
-| Initial Access | T1078 | Valid Accounts | 02 |
-| Defense Evasion | T1055 | Process Injection (deleted-binary indicator) | 03 |
-| Defense Evasion | T1070 | Indicator Removal on Host | 07 |
-| Defense Evasion | T1222 | File and Directory Permissions Modification | 06 |
-| Persistence | T1543 | Create or Modify System Process | 05 |
-| Persistence | T1053 | Scheduled Task / Job | 05 |
-| Persistence | T1098 | Account Manipulation | 05 |
+| Discovery | [T1082](https://attack.mitre.org/techniques/T1082/) | System Information Discovery | 01 |
+| Discovery | [T1087](https://attack.mitre.org/techniques/T1087/) | Account Discovery | 02 |
+| Discovery | [T1057](https://attack.mitre.org/techniques/T1057/) | Process Discovery | 03 |
+| Discovery | [T1049](https://attack.mitre.org/techniques/T1049/) | System Network Connections Discovery | 04 |
+| Discovery | [T1016](https://attack.mitre.org/techniques/T1016/) | System Network Configuration Discovery | 04 |
+| Discovery | [T1083](https://attack.mitre.org/techniques/T1083/) | File and Directory Discovery | 06 |
+| Initial Access | [T1078](https://attack.mitre.org/techniques/T1078/) | Valid Accounts | 02 |
+| Defense Evasion | [T1055](https://attack.mitre.org/techniques/T1055/) | Process Injection (deleted-binary indicator) | 03 |
+| Defense Evasion | [T1070](https://attack.mitre.org/techniques/T1070/) | Indicator Removal on Host | 07 |
+| Defense Evasion | [T1222](https://attack.mitre.org/techniques/T1222/) | File and Directory Permissions Modification | 06 |
+| Persistence | [T1543](https://attack.mitre.org/techniques/T1543/) | Create or Modify System Process | 05 |
+| Persistence | [T1053](https://attack.mitre.org/techniques/T1053/) | Scheduled Task / Job | 05 |
+| Persistence | [T1098](https://attack.mitre.org/techniques/T1098/) | Account Manipulation | 05 |
 
 **8 techniques covered today, 13 at completion.**
 
@@ -215,7 +215,7 @@ These are the deliberate engineering choices that separate this toolkit from a h
 
 ### `set -euo pipefail` on every script
 
-Fail fast, fail loud. Silent failure during an incident is dangerous — an analyst thinking "the collection succeeded" when in fact half the artifacts are missing is worse than a script that crashes visibly.
+Fail fast, fail loud. Silent failure during an incident is dangerous an analyst thinking "the collection succeeded" when in fact half the artifacts are missing is worse than a script that crashes visibly.
 
 ### UTC everywhere
 
@@ -227,7 +227,7 @@ The orchestrator's `if bash "${module}" "${CASE_DIR}"; then ... else "FAILED (co
 
 ### Chain of custody via SHA-256
 
-Every bundle is hashed the moment it's written. Any subsequent modification of the tarball breaks the hasan implicit tamper-evident seal an auditor can verify.
+Every bundle is hashed the moment it's written. Any subsequent modification of the tarball breaks the hash an implicit tamper-evident seal an auditor can verify.
 
 ### Deleted-binary detection via `/proc/<pid>/exe`
 
@@ -247,12 +247,12 @@ When attackers delete their binary after execution, the kernel keeps the process
 *(For recruiters and hiring managers what this repository proves I can do.)*
 
 - **Incident-response methodology** volatility-first collection order, chain-of-custody discipline, decision-focused artifact prioritization
-- **MITRE ATT&CK fluency** every collection step explicitly mapped to a technique; both offensive (T1055 evasion) and defensive (T1082 discovery) angles
+- **MITRE ATT&CK fluency** every collection step explicitly mapped to a technique; both offensive ([T1055](https://attack.mitre.org/techniques/T1055/) evasion) and defensive ([T1082](https://attack.mitre.org/techniques/T1082/) discovery) angles
 - **Defensive Bash engineering** production-grade error handling, portable idioms, feature detection, graceful degradation
 - **Linux internals knowledge** `/proc` traversal, symlink introspection, UID auditing, NUL-separated cmdline parsing
 - **Detection engineering mindset** thinking about what artifacts *reveal* an attacker, not just what commands *exist*
 - **Documentation and communication** this README is itself a work sample; ability to translate technical work into a hiring manager's decision language
-- **Version-controlled, disciplined shipping** public Git history showing weekly incremental commits, meaningful messages, and no force-pushes
+- **Version-controlled, disciplined shipping** public [Git history](https://github.com/WiLL75G/linux-triage-toolkit/commits/main) showing weekly incremental commits, meaningful messages, and no force-pushes
 
 ---
 
@@ -262,9 +262,9 @@ When attackers delete their binary after execution, the kernel keeps the process
 
 | # | Sunday | Scope | Status |
 |---|---|---|---|
-| 1 | May 24, 2026 | Project scaffold + `triage.sh` orchestrator + `01_system_info` | ✅ Shipped |
-| 2 | May 31, 2026 | `02_users` sessions, login history, sudoers audit | ✅ Shipped |
-| 3 | Jul 2, 2026 | `03_processes` process tree + deleted-binary detection *(catch-up)* | ✅ Shipped |
+| 1 | May 24, 2026 | Project scaffold + `triage.sh` orchestrator + [`01_system_info`](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/modules/01_system_info.sh) | ✅ Shipped |
+| 2 | May 31, 2026 | [`02_users`](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/modules/02_users.sh) sessions, login history, sudoers audit | ✅ Shipped |
+| 3 | Jul 2, 2026 | [`03_processes`](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/modules/03_processes.sh) process tree + deleted-binary detection *(catch-up)* | ✅ Shipped |
 | 4 | Jul 5, 2026 | `04_network` listeners, established conns, ARP, firewall | 🔜 Planned |
 | 5 | Jul 12, 2026 | `05_persistence` cron, systemd, SSH keys, shell rc files | 🔜 Planned |
 | 6 | Jul 19, 2026 | `06_files` + `07_logs` file artifacts and log capture | 🔜 Planned |
@@ -289,6 +289,8 @@ linux-triage-toolkit/
 ├── LICENSE
 └── README.md
 ```
+
+Browse the code: [triage.sh](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/triage.sh) · [modules/](https://github.com/WiLL75G/linux-triage-toolkit/tree/main/modules) · [.gitignore](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/.gitignore) · [LICENSE](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/LICENSE)
 
 ---
 
@@ -320,15 +322,15 @@ Focused on blue-team operations, threat detection, and incident response.
 - **X / Twitter:** [@WilliamInCyber](https://x.com/WilliamInCyber)
 - **Portfolio:** [will75g.github.io/-portfolio/](https://will75g.github.io/-portfolio/)
 
-*Currently seeking Tier 1 / entry-level SOC roles at remote-friendly MSSPs. Open to conversations reach out via LinkedIn or GitHub Issues on this repository.*
+*Currently seeking Tier 1 / entry-level SOC roles at remote-friendly MSSPs. Open to conversations reach out via LinkedIn or [GitHub Issues](https://github.com/WiLL75G/linux-triage-toolkit/issues) on this repository.*
 
 ---
 
 ## License
 
-MIT License see [LICENSE](LICENSE) for full text.
+MIT License see [LICENSE](https://github.com/WiLL75G/linux-triage-toolkit/blob/main/LICENSE) for full text.
 
 ---
 
-> **Built in public as part of a documented learning journey toward a SOC Tier 1 Analyst role.**
-Feedback, issues, and pull requests welcomed.
+**Built in public as part of a documented learning journey toward a SOC Tier 1 Analyst role.**
+Feedback, issues, and [pull requests](https://github.com/WiLL75G/linux-triage-toolkit/pulls) welcomed.
