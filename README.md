@@ -96,7 +96,7 @@ That's it. No agents, no dependencies, no configuration files.
 
 ## Live Demo (Sample Output)
 
-**Detecting evasive malware via deleted binaries** — a signature technique of this toolkit:
+**Detecting evasive malware via deleted binaries** a signature technique of this toolkit:
 
 ```
 --- Processes with deleted binaries (T1055 evasion indicator) ---
