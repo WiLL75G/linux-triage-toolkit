@@ -299,7 +299,7 @@ linux-triage-toolkit/
 - Primarily tested against **Debian/Ubuntu**; RHEL/CentOS code paths use fallbacks that are not yet end-to-end validated
 - Some artifacts (`auth.log`, `lastb`, `sudoers`) require root; the tool degrades gracefully with explicit "not readable" notices rather than crashing
 - **No remote collection** designed for on-host execution; use `scp` to retrieve bundles from a compromised host
-- **Assumes uncompromised root at collection time** — a pre-existing rootkit could return falsified data. Layer with LiME-based memory acquisition for a complete answer.
+- **Assumes uncompromised root at collection time** a pre-existing rootkit could return falsified data. Layer with LiME-based memory acquisition for a complete answer.
 
 **Planned enhancements:**
 
