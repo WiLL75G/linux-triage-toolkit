@@ -313,7 +313,7 @@ linux-triage-toolkit/
 
 ## Author & Contact
 
-**[@WilliamInCyber](https://x.com/WilliamInCyber)** — SOC Analyst (in training)
+**[@WilliamInCyber](https://x.com/WilliamInCyber)** SOC Analyst (in training)
 Focused on blue-team operations, threat detection, and incident response.
 
 - **GitHub:** [@WiLL75G](https://github.com/WiLL75G)
@@ -330,5 +330,5 @@ MIT License see [LICENSE](LICENSE) for full text.
 
 ---
 
-**Built in public as part of a documented learning journey toward a SOC Tier 1 Analyst role.**
+> **Built in public as part of a documented learning journey toward a SOC Tier 1 Analyst role.**
 Feedback, issues, and pull requests welcomed.
