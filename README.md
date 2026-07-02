@@ -19,7 +19,7 @@ Built as a public, incrementally-shipped learning project by a **SOC analyst-in-
 
 ---
 
-## 📖 Table of Contents
+## Table of Contents
 
 - [The Problem](#-the-problem)
 - [What This Tool Does](#-what-this-tool-does)
@@ -94,7 +94,7 @@ That's it. No agents, no dependencies, no configuration files.
 
 ---
 
-## 🔬 Live Demo (Sample Output)
+## Live Demo (Sample Output)
 
 **Detecting evasive malware via deleted binaries** a signature technique of this toolkit:
 
@@ -126,7 +126,7 @@ output/ir-host_20260702T112120Z.tar.gz: OK
 
 ---
 
-## 🛠 Installation
+## Installation
 
 ### Requirements
 
@@ -146,7 +146,7 @@ That's it. No dependencies, no configuration, no compilation.
 
 ---
 
-## ▶️ Usage
+## Usage
 
 ### One-shot collection
 
@@ -209,7 +209,7 @@ Every module maps to specific ATT&CK techniques so downstream analysts can immed
 
 ---
 
-## 🧩 Design Decisions
+## Design Decisions
 
 These are the deliberate engineering choices that separate this toolkit from a hobby script.
 
