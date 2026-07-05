@@ -11,7 +11,7 @@
 
 ---
 
-## ⚡ TL;DR
+## TL;DR
 
 `linux-triage-toolkit` snapshots the volatile state of a potentially compromised Linux host logged-in users, running processes, network connections, persistence mechanisms, file artifacts, and logs into a portable, hash-signed evidence bundle **in under 10 seconds**, using only Bash and standard POSIX tools. Every collection step is mapped to a **MITRE ATT&CK** technique so analysts know exactly what each artifact is worth.
 
