@@ -78,7 +78,7 @@ This project is a **deliberate, public learning artifact** built to demonstrate 
 2. **Defensive Bash engineering** production-grade shell scripting with fault tolerance, chain-of-custody, and graceful degradation
 3. **Linux internals fluency** using `/proc`, `/etc/passwd` UID analysis, and process introspection the way real DFIR tools do
 
-The 7-Sunday incremental build cadence (with public commits and posts each week) also demonstrates **consistent, disciplined delivery** — the same discipline required in a real SOC rotation.
+The 7-Sunday incremental build cadence (with public commits and posts each week) also demonstrates **consistent, disciplined delivery** the same discipline required in a real SOC rotation.
 
 ---
 
