@@ -48,16 +48,18 @@ OUT="${CASE_DIR}/03_processes.txt"
             echo "No processes with deleted binaries detected."
         fi
     else
-        echo "/proc not available (not Linux  expected on macOS)"
+        echo "/proc not available (not Linux -- expected on macOS)"
     fi
     echo
 
     echo "--- Top 10 CPU consumers ---"
-    ps -eo pid,user,%cpu,%mem,command --sort=-%cpu 2>/dev/null | head -n 11 \
-        || ps aux | sort -k3 -nr | head -n 10
+    { ps -eo pid,user,%cpu,%mem,command --sort=-%cpu 2>/dev/null | head -n 11; } \
+        || { ps aux | sort -k3 -nr | head -n 10; } \
+        || true
     echo
 
     echo "--- Top 10 memory consumers ---"
-    ps -eo pid,user,%cpu,%mem,command --sort=-%mem 2>/dev/null | head -n 11 \
-        || ps aux | sort -k4 -nr | head -n 10
+    { ps -eo pid,user,%cpu,%mem,command --sort=-%mem 2>/dev/null | head -n 11; } \
+        || { ps aux | sort -k4 -nr | head -n 10; } \
+        || true
 } > "${OUT}"
