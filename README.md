@@ -95,14 +95,6 @@ Built one module per week, in public. 6 of 8 modules are done. Remaining work: l
 
 ---
 
-## About me
-
-**[@WilliamInCyber](https://x.com/WilliamInCyber)**, SOC Analyst in training.
-Focused on blue team operations, threat detection, and incident response.
-
-- GitHub: [@WiLL75G](https://github.com/WiLL75G)
-- Portfolio: [will75g.github.io/-portfolio/](https://will75g.github.io/-portfolio/)
-
 Currently looking for Tier 1 SOC roles at remote friendly MSSPs.
 Open to conversations, reach out on LinkedIn or through the [issues page](https://github.com/WiLL75G/linux-triage-toolkit/issues).
 
