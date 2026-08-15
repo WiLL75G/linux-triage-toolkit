@@ -6,8 +6,9 @@
 # responder reaches for first: who logged in, what the system recorded,
 # what the kernel and services said, and what commands were run.
 #
-# Part of linux-triage-toolkit. Invoked by triage.sh, which sets OUT to
-# this module's output file. Runs standalone too:  ./modules/07_logs.sh
+# Part of linux-triage-toolkit. Invoked by triage.sh, which passes the
+# case directory as $1. Runs standalone too if given a directory:
+#   ./modules/07_logs.sh /tmp/manual_case
 #
 # Design rules (shared across all modules):
 #   - Everything wrapped in a single { ... } > "${OUT}" redirect
@@ -15,11 +16,10 @@
 #   - Prefer read-only collection; copy nothing, alter nothing
 #   - Root reads more (auth.log, lastb); the tool degrades gracefully
 
-set -o pipefail
+set -euo pipefail
 
-# When run standalone, OUT is not set by the orchestrator. Fall back to
-# stdout so the module is still useful on its own.
-OUT="${OUT:-/dev/stdout}"
+CASE_DIR="${1:?case directory required}"
+OUT="${CASE_DIR}/07_logs.txt"
 
 # Small helper: print a section header, then run whatever is passed.
 section() {
